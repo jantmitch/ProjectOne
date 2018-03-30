@@ -78,16 +78,18 @@ $.ajax({
     for (i = 0; i < response.length; i++){
         var name = response[i].name;
         var id = response[i].id;
+        var address = response[i].street;
         var location = {
             name: name,
-            id: id
+            id: id,
+            address: address
         };
 
         breweryLocation.push(location);
        
     }
     console.log(breweryLocation);
-    console.log(breweryLocation[14]);
+    console.log(breweryLocation[45]);
 });
 
 
