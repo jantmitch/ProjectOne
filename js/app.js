@@ -69,25 +69,29 @@ $("#submit").on("click", function(event) {
 var breweryLocation = [];
 var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/atlanta&s=json";
 
+
 $.ajax({
     url: locationURL,
-    method: "GET"
+    method: "GET",
   }).then(function(response) {
     console.log(response);
-    for (i = 0; i <= response.length; i++){
-        var name = (response[i].name);
-        var id = (response[i].id);
+    for (i = 0; i < response.length; i++){
+        var name = response[i].name;
+        var id = response[i].id;
         var location = {
             name: name,
             id: id
         };
-       console.log(location);
+
         breweryLocation.push(location);
+       
     }
-    cosole.log(response)
+    console.log(breweryLocation);
+    console.log(breweryLocation[14]);
 });
-console.log(breweryLocation);
-console.log(breweryLocation[23]);
+
+
+
 
 // var latLongURL = "http://beermapping.com/webservice/locmap/69532efc6359f9b54164a0a7a34c23d9/" + locationID + "&s=json";
 
