@@ -65,3 +65,42 @@ $("#submit").on("click", function(event) {
 //     var factor = Math.pow(10, precision);
 //     return Math.round(number * factor) / factor;
 //   }
+
+var breweryLocation = [];
+var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/atlanta&s=json";
+
+$.ajax({
+    url: locationURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response);
+    for (i = 0; i <= response.length; i++){
+        var name = (response[i].name);
+        var id = (response[i].id);
+        var location = {
+            name: name,
+            id: id
+        };
+       console.log(location);
+        breweryLocation.push(location);
+    }
+    cosole.log(response)
+});
+console.log(breweryLocation);
+console.log(breweryLocation[23]);
+
+// var latLongURL = "http://beermapping.com/webservice/locmap/69532efc6359f9b54164a0a7a34c23d9/" + locationID + "&s=json";
+
+// $.ajax({
+//     url: latLongURL,
+//     method: "GET"
+//   }).then(function(results) {
+//     console.log(results);
+
+//     for (i = 0; i <= results.length; i++){
+        
+//     }
+//     console.log(results.length);
+//   });
+
+  
