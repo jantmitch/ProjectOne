@@ -7,9 +7,18 @@
   width: 100%;
  }
 
- #table {
-   font-size: 18px;
- }
+ table, th, td {
+  border: 1px solid rgba(245, 245, 245, 0.733);
+  
+}
+th{
+  font-size: 21px;
+}
+
+td{
+  font-size: 18px;
+  text-align: left;
+}
 /* Links */
 a,
 a:focus,
