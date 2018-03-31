@@ -13,7 +13,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 var i = 0;
 
-
 //Google Maps initialization
 var googlemapskey = "AIzaSyDGFGtDjFjtK0HwWh-z08kyw-WAgNSg98E";
 
@@ -44,52 +43,68 @@ $("#test").on("click", function(event) {
 });
 
 
-// // Get the size of an object
-Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-  };
-//   // Get the size of an object
-// var size = Object.size(myArray);
+// var map;
+// function initMap() {
+// map = new google.maps.Map(document.getElementById('map'), {
+//     zoom: 2,
+//     center: new google.maps.LatLng(2.8,-187.3),
+//     mapTypeId: 'terrain'
+// });
 
+// // Create a <script> tag and set the USGS URL as the source.
+// var script = document.createElement('script');
+// // This example uses a local copy of the GeoJSON stored at
+// // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+// script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+// document.getElementsByTagName('head')[0].appendChild(script);
+// }
 
+// // Loop through the results array and place a marker for each
+// // set of coordinates.
+// window.eqfeed_callback = function(results) {
+// for (var i = 0; i < results.features.length; i++) {
+//     var coords = results.features[i].geometry.coordinates;
+//     var latLng = new google.maps.LatLng(coords[1],coords[0]);
+//     var marker = new google.maps.Marker({
+//     position: latLng,
+//     map: map
+//     });
+// }
+// }
 
 
 //Show Map
-// function initMap() {
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//       zoom: 3,
-//       center: buckinghampalace
-//     });
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 3,
+      center: buckinghampalace
+    });
 
-//     // Create an array of alphabetical characters used to label the markers.
-//     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // Create an array of alphabetical characters used to label the markers.
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-//     // Add some markers to the map.
-//     // Note: The code uses the JavaScript Array.prototype.map() method to
-//     // create an array of markers based on a given "locations" array.
-//     // The map() method here has nothing to do with the Google Maps API.
-//     var markers = locations.map(function(location, i) {
-//       return new google.maps.Marker({
-//         position: location,
-//         label: labels[i % labels.length]
-//       });
-//     });
+    // Add some markers to the map.
+    // Note: The code uses the JavaScript Array.prototype.map() method to
+    // create an array of markers based on a given "locations" array.
+    // The map() method here has nothing to do with the Google Maps API.
+    var markers = locations.map(function(location, i) {
+      return new google.maps.Marker({
+        position: location,
+        label: labels[i % labels.length]
+      });
+    });
 
-//     Creates a marker at the position on map
-//     var marker = new google.maps.Marker({
-//       position: buckinghampalace,
-//       map: map
-//     });
+    // Creates a marker at the position on map
+    // var marker = new google.maps.Marker({
+    //   position: buckinghampalace,
+    //   map: map
+    // });
     
 
-//     Add a marker clusterer to manage the markers.
-//     var markerCluster = new MarkerClusterer(map, markers,
-//         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-//   }
+    // Add a marker clusterer to manage the markers.
+    var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+  }
   
 // Clear Firebase
 $("#clearfirebase").on("click", function(event) {
@@ -101,7 +116,9 @@ $("#clearfirebase").on("click", function(event) {
 // This function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("value", function(snapshot) {
     // console.log(snapshot.val().length);
-    i = snapshot.val().length;
+    console.log(snapshot.val());
+    console.log(locations);
+    i = snapshot.val().length;  
 });
 
 var j = 0;
@@ -119,9 +136,9 @@ database.ref().on("child_added", function(snapshot) {
     // console.log(locations);
     // locations.push(newlocation);
     // console.log(newlocation);
-    // console.log(locations);
     locations = Object.keys(locationsobj).map(function(key) {
-        return [Number(key), locationsobj[key]];
+        // return [Number(key), locationsobj[key]];
+        return [locationsobj[key]];
       });
     // console.log(locations);
 
@@ -146,6 +163,7 @@ var createRow = function(name, address){
 
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
+    console.log("Submit");
     // event.preventDefault() prevents submit button from trying to send a form.
     // Using a submit button instead of a regular button allows the user to hit
     // "Enter" instead of clicking the button if desired
@@ -183,32 +201,13 @@ $("#submit").on("click", function(event) {
 });  
 
 
-
-var map;
-function initMap() {
-map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 2,
-    center: new google.maps.LatLng(2.8,-187.3),
-    mapTypeId: 'terrain'
-});
-
-// Create a <script> tag and set the USGS URL as the source.
-var script = document.createElement('script');
-// This example uses a local copy of the GeoJSON stored at
-// http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-document.getElementsByTagName('head')[0].appendChild(script);
-}
-
-// Loop through the results array and place a marker for each
-// set of coordinates.
-window.eqfeed_callback = function(results) {
-for (var i = 0; i < results.features.length; i++) {
-    var coords = results.features[i].geometry.coordinates;
-    var latLng = new google.maps.LatLng(coords[1],coords[0]);
-    var marker = new google.maps.Marker({
-    position: latLng,
-    map: map
-    });
-}
-}
+// // Get the size of an object
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  };
+//   // Get the size of an object
+// var size = Object.size(myArray);
