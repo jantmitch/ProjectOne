@@ -89,37 +89,37 @@ $("#test").on("click", function(event) {
 
 
 //Map Locations Array 
-// function initMap() {
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//       zoom: 3,
-//       center: buckinghampalace
-//     });
+function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 3,
+      center: buckinghampalace
+    });
 
-//     // Create an array of alphabetical characters used to label the markers.
-//     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    // Create an array of alphabetical characters used to label the markers.
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-//     // Add some markers to the map.
-//     // Note: The code uses the JavaScript Array.prototype.map() method to
-//     // create an array of markers based on a given "locations" array.
-//     // The map() method here has nothing to do with the Google Maps API.
-//     var markers = locations.map(function(location, i) {
-//       return new google.maps.Marker({
-//         position: location,
-//         label: labels[i % labels.length]
-//       });
-//     });
+    // Add some markers to the map.
+    // Note: The code uses the JavaScript Array.prototype.map() method to
+    // create an array of markers based on a given "locations" array.
+    // The map() method here has nothing to do with the Google Maps API.
+    var markers = locations.map(function(location, i) {
+      return new google.maps.Marker({
+        position: location,
+        label: labels[i % labels.length]
+      });
+    });
     
-//     map.addListener('click', function(e) {
-//         console.log("map click");
-//         // data.lat = e.latLng.lat();
-//         // data.lng = e.latLng.lng();
-//         // addToFirebase(data);
-//       });
+    map.addListener('click', function(e) {
+        console.log("map click");
+        // data.lat = e.latLng.lat();
+        // data.lng = e.latLng.lng();
+        // addToFirebase(data);
+      });
 
-//     // Add a marker clusterer to manage the markers.
-//     var markerCluster = new MarkerClusterer(map, markers,
-//         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-//   }
+    // Add a marker clusterer to manage the markers.
+    var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+  }
   
 // Clear Firebase
 $("#clearfirebase").on("click", function(event) {
@@ -188,7 +188,8 @@ $("#submit").on("click", function(event) {
     
     $.ajax({
       url: geocodeQuery,
-      method: "GET"
+      method: "GET",
+      dataType: "jsonp",
     }).then(function(response) {
         // console.log(response);
         // console.log(response.results[0].geometry.location.lat);

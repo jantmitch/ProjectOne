@@ -7,6 +7,9 @@
   width: 100%;
  }
 
+ #table {
+   font-size: 18px;
+ }
 /* Links */
 a,
 a:focus,
