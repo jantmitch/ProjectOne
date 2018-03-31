@@ -5,6 +5,10 @@
  #map {
   height: 400px;
   width: 100%;
+  display: block;
+ }
+ .container{
+   margin-top:10%;
  }
 
  table, th, td {
