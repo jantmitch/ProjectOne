@@ -196,6 +196,8 @@ $("#submit").on("click", function(event) {
             });
             i++;
         }
+
+        initMap();
     });
   
 });  
