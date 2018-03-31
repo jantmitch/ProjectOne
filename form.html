@@ -2,35 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
 
     <title>ProjectOne</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
 
-    <!-- Custom styles for this template -->
-    <link href="style.css" rel="stylesheet">
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+  <!-- Firebase Reference -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
 
-    <script src="directions.js"></script>
+  <!-- Moment Reference -->
+  <script src="js/moment.js"></script>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <script src="js/directions.js"></script>
+
   </head>
 
   <body>
@@ -46,7 +41,7 @@
               <h3 class="masthead-brand">One.Beer.Later.</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li class="active"><a href="landing.html">Home</a></li>
+                  <li class="active"><a href="index.html">Home</a></li>
                   <li><a href="#">Features</a></li>
                   <li><a href="#">Contact</a></li>
                 </ul>
@@ -55,35 +50,81 @@
           </div>
 
           <div class="inner cover">
-            <h1 class="cover-heading">Search a location</h1>
-            <p class="lead"></p>
-            <p class="lead">
-                <form>
-                    <div class="form-group">
-                      <label for="exampleInputCity">Location</label>
-                      <input type="text" class="form-control" id="exampleInputCity" placeholder="...">
-                      </div>
-                    
-                
-                     <br>
-                     <br>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button> 
-                    
-                   
-                  </form></div>
-              
+            <div class="container">
 
-            </p>
+              <div class="row">
+          
+                <!-- Location Panel-->
+                <div class="col-lg-6">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Add Location to Map</h3>
+                    </div>
+                    <div class="panel-body">
+          
+                      <!-- Sign-up Form-->
+                      <form role="form">
+                        <!-- <div class="form-group">
+                          <label for="name-input">Name:</label>
+                          <input class="form-control" id="name-input" type="text" placeholder="Location name">
+                        </div> -->
+                        <div class="form-group">
+                          <label for="location-input">Location:</label>
+                          <input class="form-control" id="location-input" type="text" placeholder="Location or address">
+                        </div>
+                        <button class="btn btn-primary btn-lg" id="submit" type="submit">Submit</button>
+                        <button class="btn btn-primary btn-lg" id="clear" type="reset">Clear</button>
+                      </form>
+                      <!-- <button class="btn btn-primary btn-lg" id="test" type="submit">Test</button> -->
+                    </div>
+                  </div>
+                </div>
+          
+              </div>
+          
+            </div>
+            <br>
+            <br>
+      
+            <h2> Table </h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Address</th>
+                </tr>
+              </thead>
+              <tbody id="Table">
+              </tbody>
+              <button class="btn btn-primary btn-lg" id="clearfirebase" type="submit">Clear Firebase</button>
+            </table>
+      
+            <br><br>      
           </div>
 
-          
+                    
+          <h2> Map </h2>
+          <div id="map"></div>
 
         </div>
 
       </div>
 
     </div>
+
+    <!-- Script -->
+    <script type="text/javascript" src="js/app.js"></script>
+
+  <!-- Initialize Google Maps -->
+
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6b6PThKZfWpNBOo_s6f1caBl9iB2PG4E&callback=initMap">
+</script>
+
+<!-- Google maps markerclusterer -->
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    </body>
+  </html>
 
 
 

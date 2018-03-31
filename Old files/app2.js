@@ -14,7 +14,7 @@ var database = firebase.database();
 var i = 0;
 
 //Google Maps initialization
-var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
+var googlemapskey = "AIzaSyDGFGtDjFjtK0HwWh-z08kyw-WAgNSg98E";
 
 //Coordinates
 var uluru = {lat: -25.363, lng: 131.044};
@@ -42,54 +42,40 @@ $("#test").on("click", function(event) {
     console.log(result);
 });
 
-// JSON Map
 
-// var map;
+var map;
+function initMap() {
+map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 2,
+    center: new google.maps.LatLng(2.8,-187.3),
+    mapTypeId: 'terrain'
+});
+
+// Create a <script> tag and set the USGS URL as the source.
+var script = document.createElement('script');
+// This example uses a local copy of the GeoJSON stored at
+// http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
+script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
+document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+// Loop through the results array and place a marker for each
+// set of coordinates.
+window.eqfeed_callback = function(results) {
+for (var i = 0; i < results.features.length; i++) {
+    var coords = results.features[i].geometry.coordinates;
+    var latLng = new google.maps.LatLng(coords[1],coords[0]);
+    var marker = new google.maps.Marker({
+    position: latLng,
+    map: map
+    });
+}
+}
+
+
+//Show Map
 // function initMap() {
-// map = new google.maps.Map(document.getElementById('map'), {
-//     zoom: 2,
-//     center: new google.maps.LatLng(2.8,-187.3),
-//     mapTypeId: 'terrain'
-// });
-
-// // Create a <script> tag and set the USGS URL as the source.
-// var script = document.createElement('script');
-// // This example uses a local copy of the GeoJSON stored at
-// // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-// script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-// document.getElementsByTagName('head')[0].appendChild(script);
-// }
-
-// // Loop through the results array and place a marker for each
-// // set of coordinates.
-// window.eqfeed_callback = function(results) {
-// for (var i = 0; i < results.features.length; i++) {
-//     var coords = results.features[i].geometry.coordinates;
-//     var latLng = new google.maps.LatLng(coords[1],coords[0]);
-//     var marker = new google.maps.Marker({
-//     position: latLng,
-//     map: map
-//     });
-// }
-// }
-
-//Simple Map
-// function initMap() {
-//     // console.log("init Map");
-//     var uluru = {lat: -25.363, lng: 131.044};
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//       zoom: 4,
-//       center: uluru
-//     });
-//     var marker = new google.maps.Marker({
-//       position: uluru,
-//       map: map
-//     });
-//   }
-
-
-//Map Locations Array 
-// function initMap() {
+//     console.log("init map");
 //     var map = new google.maps.Map(document.getElementById('map'), {
 //       zoom: 3,
 //       center: buckinghampalace
@@ -108,13 +94,13 @@ $("#test").on("click", function(event) {
 //         label: labels[i % labels.length]
 //       });
 //     });
+
+//     // Creates a marker at the position on map
+//     // var marker = new google.maps.Marker({
+//     //   position: buckinghampalace,
+//     //   map: map
+//     // });
     
-//     map.addListener('click', function(e) {
-//         console.log("map click");
-//         // data.lat = e.latLng.lat();
-//         // data.lng = e.latLng.lng();
-//         // addToFirebase(data);
-//       });
 
 //     // Add a marker clusterer to manage the markers.
 //     var markerCluster = new MarkerClusterer(map, markers,
@@ -178,19 +164,21 @@ var createRow = function(name, address){
 
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
+    console.log("Submit");
     // event.preventDefault() prevents submit button from trying to send a form.
     // Using a submit button instead of a regular button allows the user to hit
     // "Enter" instead of clicking the button if desired
     event.preventDefault();
     
-    var location = $("#location-input").val().trim();
-    var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + googlemapskey;
+    var name = $("#name-input").val().trim();
+    var address = $("#address-input").val().trim();
+    var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + googlemapskey;
     
     $.ajax({
       url: geocodeQuery,
       method: "GET"
     }).then(function(response) {
-        // console.log(response);
+        console.log(response);
         // console.log(response.results[0].geometry.location.lat);
         var latit = response.results[0].geometry.location.lat;
         var longi = response.results[0].geometry.location.lng;
@@ -199,21 +187,20 @@ $("#submit").on("click", function(event) {
         var add = response.results[0].formatted_address;
         var coordinates = {lat: latit, lng: longi};
 
-        if (location !== ""){
+        if (address !== ""){
             // Save the new post in Firebase
             database.ref(i).set({
-                name: location,
+                name: name,
                 address: add,
                 location: coordinates,
                 index: i
             });
             i++;
         }
-
-        initMap();
     });
   
 });  
+
 
 // // Get the size of an object
 Object.size = function(obj) {
