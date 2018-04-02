@@ -22,6 +22,9 @@ var buckinghampalace = {lat: 51.501364, lng: -0.141890};
 var atlanta = {lat: 33.748995, lng: -84.387982}
 //   var address = "Westminster, London SW1A 1AA, UK";
 
+//Map Locations Array 
+// var locations = [
+//     {lat: 38.8976763, lng: -77.0365298}];
 var locations = [
     // uluru,
     // buckinghampalace,
@@ -32,15 +35,148 @@ var locations = [
 
 var locationsobj = {};
 
-
+//On click functions
 $("#test").on("click", function(event) {
     console.log("test   ");
     var result = Object.keys(locations).map(function(key) {
         return [Number(key), locations[key]];
       });
-      
     console.log(result);
 });
+  
+// Clear Firebase
+$("#clearfirebase").on("click", function(event) {
+    database.ref().remove();
+    $("#Table").empty();
+});
+
+// This function handles events where the submit button is clicked
+$("#submit").on("click", function(event) {
+    // event.preventDefault() prevents submit button from trying to send a form.
+    // Using a submit button instead of a regular button allows the user to hit
+    // "Enter" instead of clicking the button if desired
+    event.preventDefault();
+    
+    var location = $("#location-input").val().trim();
+    var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + googlemapskey;
+    
+    $.ajax({
+      url: geocodeQuery,
+      method: "GET"
+    }).then(function(response) {
+        // console.log(response);
+        // console.log(response.results[0].geometry.location.lat);
+        var latit = response.results[0].geometry.location.lat;
+        var longi = response.results[0].geometry.location.lng;
+        // console.log(response.results[0].geometry.location.lng);
+        // console.log(response.results[0].formatted_address);
+        var add = response.results[0].formatted_address;
+        var coordinates = {lat: latit, lng: longi};
+
+        if (location !== ""){
+            // Save the new post in Firebase
+            database.ref(i).set({
+                name: location,
+                address: add,
+                location: coordinates,
+                index: i
+            });
+            i++;
+        }
+
+        initMap();
+    });
+  
+});  
+// Save input data to Firebase and save to table
+
+// At the initial load and subsequent value changes, get a snapshot of the stored data.
+// This function allows you to update your page in real-time when the firebase database changes.
+database.ref().on("value", function(snapshot) {
+    // console.log(snapshot.val().length);
+    initMap();
+    // console.log(snapshot.val());
+    // console.log(locations);
+    // i = snapshot.val().length;  
+});
+var j = 0;
+// When a Firebase child is added, update your page in real-time
+database.ref().on("child_added", function(snapshot) {
+    // console.log(snapshot.val());
+    
+    var newname = snapshot.val().name;
+    var newaddress = snapshot.val().address;
+    var newlocation = snapshot.val().location;
+    console.log(newlocation);
+    locationsobj[j] = newlocation;
+    j++;
+
+    // console.log(locations);
+    // locations.push(newlocation);
+    // console.log(newlocation);
+    locations = Object.keys(locationsobj).map(function(key) {
+        // return [Number(key), locationsobj[key]];
+        return locationsobj[key];
+      });
+    // console.log(locations);
+
+    createRow(newname,newaddress);
+});
+
+//Create Table from Firebase
+var createRow = function(name, address){
+    // Get reference to existing tbody element, create a new table row element
+    var tBody = $("tbody");
+    var tRow = $("<tr>");
+
+    // create and save a reference to a td in the same statement we update its text
+    var name = $("<td>").text(name);
+    var address = $("<td>").text(address);
+
+    // Append the newly created table data to the table row
+    tRow.append(name,address);
+
+    // Append the table row to the table body
+    tBody.append(tRow);
+  };
+
+
+//Display Maps
+function initMap() {
+    console.log(locations);
+    // console.log(locations2);
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 3,
+      center: atlanta
+    });
+
+    // Create an array of alphabetical characters used to label the markers.
+    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    // Add some markers to the map.
+    // Note: The code uses the JavaScript Array.prototype.map() method to
+    // create an array of markers based on a given "locations" array.
+    // The map() method here has nothing to do with the Google Maps API.
+    var markers = locations.map(function(location, i) {
+      return new google.maps.Marker({
+        position: location,
+        label: labels[i % labels.length]
+      });
+    });
+    
+    var data;
+    map.addListener('click', function(e) {
+        console.log("map click");
+        // data.lat = e.latLng.lat();
+        // data.lng = e.latLng.lng();
+        // addToFirebase(data);
+      });
+
+    // Add a marker clusterer to manage the markers.
+    var markerCluster = new MarkerClusterer(map, markers,
+        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+  }
+
 
 // JSON Map
 
@@ -88,141 +224,13 @@ $("#test").on("click", function(event) {
 //   }
 
 
-//Map Locations Array 
-function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 3,
-      center: buckinghampalace
-    });
-
-    // Create an array of alphabetical characters used to label the markers.
-    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-    // Add some markers to the map.
-    // Note: The code uses the JavaScript Array.prototype.map() method to
-    // create an array of markers based on a given "locations" array.
-    // The map() method here has nothing to do with the Google Maps API.
-    var markers = locations.map(function(location, i) {
-      return new google.maps.Marker({
-        position: location,
-        label: labels[i % labels.length]
-      });
-    });
-    
-    map.addListener('click', function(e) {
-        console.log("map click");
-        // data.lat = e.latLng.lat();
-        // data.lng = e.latLng.lng();
-        // addToFirebase(data);
-      });
-
-    // Add a marker clusterer to manage the markers.
-    var markerCluster = new MarkerClusterer(map, markers,
-        {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-  }
-  
-// Clear Firebase
-$("#clearfirebase").on("click", function(event) {
-    database.ref().remove();
-    $("#Table").empty();
-});
-
-// At the initial load and subsequent value changes, get a snapshot of the stored data.
-// This function allows you to update your page in real-time when the firebase database changes.
-database.ref().on("value", function(snapshot) {
-    // console.log(snapshot.val().length);
-    console.log(snapshot.val());
-    console.log(locations);
-    i = snapshot.val().length;  
-});
-
-var j = 0;
-// When a Firebase child is added, update your page in real-time
-database.ref().on("child_added", function(snapshot) {
-    // console.log(snapshot.val());
-    
-    var newname = snapshot.val().name;
-    var newaddress = snapshot.val().address;
-    var newlocation = snapshot.val().location;
-
-    locationsobj[j] = newlocation;
-    j++;
-
-    // console.log(locations);
-    // locations.push(newlocation);
-    // console.log(newlocation);
-    locations = Object.keys(locationsobj).map(function(key) {
-        // return [Number(key), locationsobj[key]];
-        return [locationsobj[key]];
-      });
-    // console.log(locations);
-
-    createRow(newname,newaddress);
-});
-
-var createRow = function(name, address){
-    // Get reference to existing tbody element, create a new table row element
-    var tBody = $("tbody");
-    var tRow = $("<tr>");
-
-    // create and save a reference to a td in the same statement we update its text
-    var name = $("<td>").text(name);
-    var address = $("<td>").text(address);
-
-    // Append the newly created table data to the table row
-    tRow.append(name,address);
-
-    // Append the table row to the table body
-    tBody.append(tRow);
-  };
-
-// This function handles events where the submit button is clicked
-$("#submit").on("click", function(event) {
-    // event.preventDefault() prevents submit button from trying to send a form.
-    // Using a submit button instead of a regular button allows the user to hit
-    // "Enter" instead of clicking the button if desired
-    event.preventDefault();
-    
-    var location = $("#location-input").val().trim();
-    var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + googlemapskey;
-    
-    $.ajax({
-      url: geocodeQuery,
-      method: "GET",
-      dataType: "jsonp",
-    }).then(function(response) {
-        // console.log(response);
-        // console.log(response.results[0].geometry.location.lat);
-        var latit = response.results[0].geometry.location.lat;
-        var longi = response.results[0].geometry.location.lng;
-        // console.log(response.results[0].geometry.location.lng);
-        // console.log(response.results[0].formatted_address);
-        var add = response.results[0].formatted_address;
-        var coordinates = {lat: latit, lng: longi};
-
-        if (location !== ""){
-            // Save the new post in Firebase
-            database.ref(i).set({
-                name: location,
-                address: add,
-                location: coordinates,
-                index: i
-            });
-            i++;
-        }
-
-        initMap();
-    });
-  
-});  
-
 // // Get the size of an object
-Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-  };
+// Object.size = function(obj) {
+//     var size = 0, key;
+//     for (key in obj) {
+//         if (obj.hasOwnProperty(key)) size++;
+//     }
+//     return size;
+//   };
 //   // Get the size of an object
 // var size = Object.size(myArray);
