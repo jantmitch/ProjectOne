@@ -48,6 +48,7 @@ $("#test").on("click", function(event) {
 $("#clearfirebase").on("click", function(event) {
     database.ref().remove();
     $("#Table").empty();
+    locations = [];
 });
 
 // This function handles events where the submit button is clicked
@@ -185,21 +186,29 @@ function initMap() {
         content:"Hello World!"
     });
     
-    // google.maps.event.addListener(marker, 'click', function() {
-        // infowindow.open(map,marker);
-        // }); 
 
     // console.log(marker[0].getPosition());
+    var breakvar = false;
+    for (i=0 ; i< marker.length; i++){
+        if (breakvar === true ){ 
+            console.log("break");
+            console.log(i);
+            breakvar = false;
+            break;
+        }
+        google.maps.event.addListener(marker[i],'click',function() {
+            console.log("marker click");
+            console.log(i);
+            console.log(locations[i - 1]);
 
-    // for (i=0; i< marker.length;i++){
-    //     console.log("Marker clicked");
-    //     // console.log(marker[i]);
-    //     google.maps.event.addListener(marker[i],'click',function() {
-    //         // map.setZoom(9);
+            breakvar = true;
+            infowindow.open(map, marker[4]);
+            // console.log(marker);
+            // map.setZoom(9);
     //         // console.log(marker[i].getPosition());
-    //         // map.setCenter(marker[i].getPosition());
-    //     }); 
-    // }
+            // map.setCenter(locations[0]);
+        }); 
+    }
     
 
     // Add a marker clusterer to manage the markers.
