@@ -52,6 +52,7 @@ $("#clearfirebase").on("click", function(event) {
 
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
+    // console.log("click");
     // event.preventDefault() prevents submit button from trying to send a form.
     // Using a submit button instead of a regular button allows the user to hit
     // "Enter" instead of clicking the button if desired
@@ -82,6 +83,8 @@ $("#submit").on("click", function(event) {
                 index: i
             });
             i++;
+        } else {
+            console.log("no input");
         }
 
         initMap();
@@ -94,10 +97,10 @@ $("#submit").on("click", function(event) {
 // This function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("value", function(snapshot) {
     // console.log(snapshot.val().length);
+    initMap();
     // console.log(snapshot.val());
     // console.log(locations);
     i = snapshot.val().length;  
-    initMap();
 });
 var j = 0;
 // When a Firebase child is added, update your page in real-time
@@ -166,40 +169,27 @@ function initMap() {
       });
     });
 
+    // marker.setMap(map);
+    console.log(marker);
+    // console.log(marker2);
+
     // Map events
-
     // var data;
-    // map.addListener('click', function(e) {
-    //     // console.log("map click");
-    //     // data.lat = e.latLng.lat();
-    //     // data.lng = e.latLng.lng();
-    //     // addToFirebase(data);
-    //   });
-
-    google.maps.event.addListener(map, 'click', function(event) {
+    map.addListener('click', function(e) {
         console.log("map click");
-    //     // placeMarker(map, event.latLng);
-        });
+        // data.lat = e.latLng.lat();
+        // data.lng = e.latLng.lng();
+        // addToFirebase(data);
+      });
 
-    var infowindow = new google.maps.InfoWindow({
-        content:"Hello World!"
-    });
-    
-    // google.maps.event.addListener(marker, 'click', function() {
-        // infowindow.open(map,marker);
-        // }); 
-
-    // console.log(marker[0].getPosition());
-
-    // for (i=0; i< marker.length;i++){
-    //     console.log("Marker clicked");
-    //     // console.log(marker[i]);
-    //     google.maps.event.addListener(marker[i],'click',function() {
-    //         // map.setZoom(9);
-    //         // console.log(marker[i].getPosition());
-    //         // map.setCenter(marker[i].getPosition());
-    //     }); 
-    // }
+    for( i=0; i<marker.length; i++){
+    console.log(marker.length);
+      google.maps.event.addListener(marker[i],'click',function() {
+        console.log("Marker clicked")
+        map.setZoom(9);
+        map.setCenter(marker.getPosition());
+        }); 
+    }
     
 
     // Add a marker clusterer to manage the markers.
@@ -208,17 +198,7 @@ function initMap() {
   }
 
 
-  function placeMarker(map, location) {
-    // var marker = new google.maps.Marker({
-    //   position: location,
-    //   map: map
-    // });
-    var infowindow = new google.maps.InfoWindow({
-      content: 'Latitude: ' + location.lat() +
-      '<br>Longitude: ' + location.lng()
-    });
-    infowindow.open(map,marker);
-  } 
+
 
 
 
