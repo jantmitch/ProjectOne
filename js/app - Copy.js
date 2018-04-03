@@ -48,11 +48,11 @@ $("#test").on("click", function(event) {
 $("#clearfirebase").on("click", function(event) {
     database.ref().remove();
     $("#Table").empty();
-    locations = [];
 });
 
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
+    // console.log("click");
     // event.preventDefault() prevents submit button from trying to send a form.
     // Using a submit button instead of a regular button allows the user to hit
     // "Enter" instead of clicking the button if desired
@@ -83,6 +83,8 @@ $("#submit").on("click", function(event) {
                 index: i
             });
             i++;
+        } else {
+            console.log("no input");
         }
 
         initMap();
@@ -95,10 +97,10 @@ $("#submit").on("click", function(event) {
 // This function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("value", function(snapshot) {
     // console.log(snapshot.val().length);
+    initMap();
     // console.log(snapshot.val());
     // console.log(locations);
     i = snapshot.val().length;  
-    initMap();
 });
 var j = 0;
 // When a Firebase child is added, update your page in real-time
@@ -167,46 +169,25 @@ function initMap() {
       });
     });
 
+    // marker.setMap(map);
+    console.log(marker);
+    // console.log(marker2);
+
     // Map events
-
     // var data;
-    // map.addListener('click', function(e) {
-    //     // console.log("map click");
-    //     // data.lat = e.latLng.lat();
-    //     // data.lng = e.latLng.lng();
-    //     // addToFirebase(data);
-    //   });
-
-    google.maps.event.addListener(map, 'click', function(event) {
+    map.addListener('click', function(e) {
         console.log("map click");
-    //     // placeMarker(map, event.latLng);
-        });
+        // data.lat = e.latLng.lat();
+        // data.lng = e.latLng.lng();
+        // addToFirebase(data);
+      });
 
-    var infowindow = new google.maps.InfoWindow({
-        content:"Hello World!"
-    });
-    
-
-    // console.log(marker[0].getPosition());
-    var breakvar = false;
-    for (i=0 ; i< marker.length; i++){
-        if (breakvar === true ){ 
-            console.log("break");
-            console.log(i);
-            breakvar = false;
-            break;
-        }
-        google.maps.event.addListener(marker[i],'click',function() {
-            console.log("marker click");
-            console.log(i);
-            console.log(locations[i - 1]);
-
-            breakvar = true;
-            infowindow.open(map, marker[4]);
-            // console.log(marker);
-            // map.setZoom(9);
-    //         // console.log(marker[i].getPosition());
-            // map.setCenter(locations[0]);
+    for( i=0; i<marker.length; i++){
+    console.log(marker.length);
+      google.maps.event.addListener(marker[i],'click',function() {
+        console.log("Marker clicked")
+        map.setZoom(9);
+        map.setCenter(marker.getPosition());
         }); 
     }
     
@@ -217,17 +198,7 @@ function initMap() {
   }
 
 
-  function placeMarker(map, location) {
-    // var marker = new google.maps.Marker({
-    //   position: location,
-    //   map: map
-    // });
-    var infowindow = new google.maps.InfoWindow({
-      content: 'Latitude: ' + location.lat() +
-      '<br>Longitude: ' + location.lng()
-    });
-    infowindow.open(map,marker);
-  } 
+
 
 
 
@@ -280,55 +251,6 @@ function initMap() {
 //   }
 
 
-// function precisionRound(number, precision) {
-//     var factor = Math.pow(10, precision);
-//     return Math.round(number * factor) / factor;
-//   }
-
-var breweryLocation = [];
-var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/atlanta&s=json";
-
-
-$.ajax({
-    url: locationURL,
-    method: "GET",
-  }).then(function(response) {
-    console.log(response);
-    for (i = 0; i < response.length; i++){
-        var name = response[i].name;
-        var id = response[i].id;
-        var address = response[i].street;
-        var location = {
-            name: name,
-            id: id,
-            address: address
-        };
-
-        breweryLocation.push(location);
-       
-    }
-    console.log(breweryLocation);
-    console.log(breweryLocation[45]);
-});
-
-
-
-
-// var latLongURL = "http://beermapping.com/webservice/locmap/69532efc6359f9b54164a0a7a34c23d9/" + locationID + "&s=json";
-
-// $.ajax({
-//     url: latLongURL,
-//     method: "GET"
-//   }).then(function(results) {
-//     console.log(results);
-
-//     for (i = 0; i <= results.length; i++){
-        
-//     }
-//     console.log(results.length);
-//   });
-
-  
 // // Get the size of an object
 // Object.size = function(obj) {
 //     var size = 0, key;
