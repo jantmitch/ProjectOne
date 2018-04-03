@@ -8,7 +8,6 @@
 
     <title>ProjectOne</title>
 
-  
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
@@ -25,6 +24,8 @@
   <!-- Moment Reference -->
   <script src="js/moment.js"></script>
 
+  <script src="js/directions.js"></script>
+
   </head>
 
   <body>
@@ -40,7 +41,7 @@
               <h3 class="masthead-brand">One.Beer.Later.</h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
+                  <li class="active"><a href="index.html">Home</a></li>
                   <li><a href="map.html">Location</a></li>
                   <li><a href="map2.html">Map</a></li>
                 </ul>
@@ -48,32 +49,25 @@
             </div>
           </div>
 
-          <div class="inner cover">
-            <h1 class="cover-heading">Welcome</h1>
-            <br>
-            <p class="lead"></p>
-            <p class="lead">
-              <a href="map.html" class="btn btn-lg btn-default">Beer Map</a>
+                
+          <h1> Map </h1>
+          <div id="map"></div>
 
-            </p>
-          </div>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Connect With Us: <a href="https://www.linkedin.com/in/jantmitch1/" target="_blank">Anthony</a>,<a href="https://www.linkedin.com/in/jasonpaffenback/"target="_blank">Jason</a>, 
-                  <a href="https://www.linkedin.com/in/liao-max/" target="_blank">Max</a> 
-                </a></p>
-            </div>
-          </div>
-
-        </div>
 
       </div>
 
     </div>
 
     <!-- Script -->
-    <!-- <script type="text/javascript" src="js/app.js"></script> -->
-    <script type="text/javascript" src="js/TestCode.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+  <!-- Initialize Google Maps -->
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6b6PThKZfWpNBOo_s6f1caBl9iB2PG4E&callback=initMap">
+</script>
+
+<!-- Google maps markerclusterer -->
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     </body>
   </html>
+
