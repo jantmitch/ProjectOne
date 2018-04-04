@@ -66,11 +66,8 @@ $("#submit").on("click", function (event) {
         method: "GET"
     }).then(function (response) {
         // console.log(response);
-        // console.log(response.results[0].geometry.location.lat);
         var latit = response.results[0].geometry.location.lat;
         var longi = response.results[0].geometry.location.lng;
-        // console.log(response.results[0].geometry.location.lng);
-        // console.log(response.results[0].formatted_address);
         var add = response.results[0].formatted_address;
         var coordinates = { lat: latit, lng: longi };
 
@@ -84,7 +81,6 @@ $("#submit").on("click", function (event) {
             });
             i++;
         }
-
         initMap();
     });
 
@@ -156,6 +152,7 @@ database.ref().on("value", function (snapshot) {
     i = snapshot.val().length;
     initMap();
 });
+
 var j = 0;
 // When a Firebase child is added, update your page in real-time
 database.ref().on("child_added", function (snapshot) {
@@ -168,6 +165,7 @@ database.ref().on("child_added", function (snapshot) {
     locationsobj[j] = newlocation;
     j++;
 
+<<<<<<< HEAD
     // console.log(locations);
     // locations.push(newlocation);
     // console.log(newlocation);
@@ -178,6 +176,14 @@ database.ref().on("child_added", function (snapshot) {
     // console.log(locations);
 
     createRow(newname, newaddress);
+=======
+
+    locations = Object.keys(locationsobj).map(function(key) {
+        // return [Number(key), locationsobj[key]];
+        return locationsobj[key];
+      });
+    createRow(newname,newaddress);
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
 });
 
 //Create Table from Firebase
@@ -195,7 +201,19 @@ var createRow = function (name, address) {
 
     // Append the table row to the table body
     tBody.append(tRow);
+<<<<<<< HEAD
 };
+=======
+
+    // Grab city/state
+    var addressstr = JSON.stringify(address[0]);
+    console.log(addressstr);
+    // for (i = 0; i<addressstr.length;i++){
+    //     console.log(addressstr[i]);
+    // }
+
+  };
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
 
 
 //Display Maps
@@ -208,9 +226,12 @@ function initMap() {
 
     // Create an array of alphabetical characters used to label the markers.
     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+<<<<<<< HEAD
 
     // Marker variable
     // var marker2 = new google.maps.Marker({position:atlanta});
+=======
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
 
     // Add some markers to the map.
     // Note: The code uses the JavaScript Array.prototype.map() method to
@@ -225,6 +246,7 @@ function initMap() {
 
     // Map events
 
+<<<<<<< HEAD
     // var data;
     // map.addListener('click', function(e) {
     //     // console.log("map click");
@@ -234,6 +256,9 @@ function initMap() {
     //   });
 
     google.maps.event.addListener(map, 'click', function (event) {
+=======
+    google.maps.event.addListener(map, 'click', function(event) {
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
         console.log("map click");
         //     // placeMarker(map, event.latLng);
     });
@@ -241,9 +266,21 @@ function initMap() {
     var infowindow = new google.maps.InfoWindow({
         content: "Hello World!"
     });
+<<<<<<< HEAD
 
 
+=======
+    
+    // var data;
+    // map.addListener('click', function(e) {
+    //     // console.log("map click");
+    //     // data.lat = e.latLng.lat();
+    //     // data.lng = e.latLng.lng();
+    //     // addToFirebase(data);
+    //   });
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
     // console.log(marker[0].getPosition());
+
     var breakvar = false;
     for (i = 0; i < marker.length; i++) {
         if (breakvar === true) {
@@ -255,13 +292,17 @@ function initMap() {
         google.maps.event.addListener(marker[i], 'click', function () {
             console.log("marker click");
             console.log(i);
-            console.log(locations[i - 1]);
+            // console.log(locations[i - 1]);
 
             breakvar = true;
-            infowindow.open(map, marker[4]);
+            // infowindow.open(map, marker[4]);
             // console.log(marker);
             // map.setZoom(9);
+<<<<<<< HEAD
             //         // console.log(marker[i].getPosition());
+=======
+            // console.log(marker[i].getPosition());
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
             // map.setCenter(locations[0]);
         });
     }
@@ -282,6 +323,7 @@ function placeMarker(map, location) {
         content: 'Latitude: ' + location.lat() +
             '<br>Longitude: ' + location.lng()
     });
+<<<<<<< HEAD
     infowindow.open(map, marker);
 }
 
@@ -361,3 +403,31 @@ function placeMarker(map, location) {
 //   };
 //   // Get the size of an object
 // var size = Object.size(myArray);
+=======
+    infowindow.open(map,marker);
+  } 
+
+
+//Brewery API
+var breweryLocation = [];
+var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/atlanta&s=json";
+
+
+$.ajax({
+    url: locationURL,
+    method: "GET",
+  }).then(function(response) {
+    // console.log(response);
+    for (i = 0; i < response.length; i++){
+        var name = response[i].name;
+        var id = response[i].id;
+        var address = response[i].street;
+        var location = {
+            name: name,
+            id: id,
+            address: address
+        };
+        breweryLocation.push(location);
+    }
+});
+>>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
