@@ -109,10 +109,10 @@ $("#submit").on("click", function (event) {
 var breweryLocation = [];
 var breweryInfo = {
     // userLocation: $("#location-input").val(),
-    
+
 
     locator(input) {
-        
+
         var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + input + "&s=json";
 
 
@@ -165,25 +165,12 @@ database.ref().on("child_added", function (snapshot) {
     locationsobj[j] = newlocation;
     j++;
 
-<<<<<<< HEAD
-    // console.log(locations);
-    // locations.push(newlocation);
-    // console.log(newlocation);
+
     locations = Object.keys(locationsobj).map(function (key) {
         // return [Number(key), locationsobj[key]];
         return locationsobj[key];
     });
-    // console.log(locations);
-
     createRow(newname, newaddress);
-=======
-
-    locations = Object.keys(locationsobj).map(function(key) {
-        // return [Number(key), locationsobj[key]];
-        return locationsobj[key];
-      });
-    createRow(newname,newaddress);
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
 });
 
 //Create Table from Firebase
@@ -201,9 +188,6 @@ var createRow = function (name, address) {
 
     // Append the table row to the table body
     tBody.append(tRow);
-<<<<<<< HEAD
-};
-=======
 
     // Grab city/state
     var addressstr = JSON.stringify(address[0]);
@@ -212,8 +196,7 @@ var createRow = function (name, address) {
     //     console.log(addressstr[i]);
     // }
 
-  };
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
+};
 
 
 //Display Maps
@@ -226,12 +209,6 @@ function initMap() {
 
     // Create an array of alphabetical characters used to label the markers.
     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-<<<<<<< HEAD
-
-    // Marker variable
-    // var marker2 = new google.maps.Marker({position:atlanta});
-=======
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
 
     // Add some markers to the map.
     // Note: The code uses the JavaScript Array.prototype.map() method to
@@ -246,19 +223,7 @@ function initMap() {
 
     // Map events
 
-<<<<<<< HEAD
-    // var data;
-    // map.addListener('click', function(e) {
-    //     // console.log("map click");
-    //     // data.lat = e.latLng.lat();
-    //     // data.lng = e.latLng.lng();
-    //     // addToFirebase(data);
-    //   });
-
     google.maps.event.addListener(map, 'click', function (event) {
-=======
-    google.maps.event.addListener(map, 'click', function(event) {
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
         console.log("map click");
         //     // placeMarker(map, event.latLng);
     });
@@ -266,11 +231,7 @@ function initMap() {
     var infowindow = new google.maps.InfoWindow({
         content: "Hello World!"
     });
-<<<<<<< HEAD
 
-
-=======
-    
     // var data;
     // map.addListener('click', function(e) {
     //     // console.log("map click");
@@ -278,7 +239,6 @@ function initMap() {
     //     // data.lng = e.latLng.lng();
     //     // addToFirebase(data);
     //   });
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
     // console.log(marker[0].getPosition());
 
     var breakvar = false;
@@ -298,11 +258,7 @@ function initMap() {
             // infowindow.open(map, marker[4]);
             // console.log(marker);
             // map.setZoom(9);
-<<<<<<< HEAD
-            //         // console.log(marker[i].getPosition());
-=======
             // console.log(marker[i].getPosition());
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
             // map.setCenter(locations[0]);
         });
     }
@@ -323,89 +279,8 @@ function placeMarker(map, location) {
         content: 'Latitude: ' + location.lat() +
             '<br>Longitude: ' + location.lng()
     });
-<<<<<<< HEAD
     infowindow.open(map, marker);
 }
-
-
-
-
-
-
-    // JSON Map
-
-    // var map;
-    // function initMap() {
-    // map = new google.maps.Map(document.getElementById('map'), {
-    //     zoom: 2,
-    //     center: new google.maps.LatLng(2.8,-187.3),
-    //     mapTypeId: 'terrain'
-    // });
-
-    // // Create a <script> tag and set the USGS URL as the source.
-    // var script = document.createElement('script');
-    // // This example uses a local copy of the GeoJSON stored at
-    // // http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojsonp
-    // script.src = 'https://developers.google.com/maps/documentation/javascript/examples/json/earthquake_GeoJSONP.js';
-    // document.getElementsByTagName('head')[0].appendChild(script);
-    // }
-
-    // // Loop through the results array and place a marker for each
-    // // set of coordinates.
-    // window.eqfeed_callback = function(results) {
-    // for (var i = 0; i < results.features.length; i++) {
-    //     var coords = results.features[i].geometry.coordinates;
-    //     var latLng = new google.maps.LatLng(coords[1],coords[0]);
-    //     var marker = new google.maps.Marker({
-    //     position: latLng,
-    //     map: map
-    //     });
-    // }
-    // }
-
-    //Simple Map
-    // function initMap() {
-    //     // console.log("init Map");
-    //     var uluru = {lat: -25.363, lng: 131.044};
-    //     var map = new google.maps.Map(document.getElementById('map'), {
-    //       zoom: 4,
-    //       center: uluru
-    //     });
-    //     var marker = new google.maps.Marker({
-    //       position: uluru,
-    //       map: map
-    //     });
-    //   }
-
-
-    // function precisionRound(number, precision) {
-    //     var factor = Math.pow(10, precision);
-    //     return Math.round(number * factor) / factor;
-    //   }
-
-    // console.log(breweryLocation[45]);
-
-
-
-
-
-
-
-
-
-// // Get the size of an object
-// Object.size = function(obj) {
-//     var size = 0, key;
-//     for (key in obj) {
-//         if (obj.hasOwnProperty(key)) size++;
-//     }
-//     return size;
-//   };
-//   // Get the size of an object
-// var size = Object.size(myArray);
-=======
-    infowindow.open(map,marker);
-  } 
 
 
 //Brewery API
@@ -416,9 +291,9 @@ var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b5416
 $.ajax({
     url: locationURL,
     method: "GET",
-  }).then(function(response) {
+}).then(function (response) {
     // console.log(response);
-    for (i = 0; i < response.length; i++){
+    for (i = 0; i < response.length; i++) {
         var name = response[i].name;
         var id = response[i].id;
         var address = response[i].street;
@@ -430,4 +305,3 @@ $.ajax({
         breweryLocation.push(location);
     }
 });
->>>>>>> 746d21760a1879c7ea09fa6628e39da9882ec7ea
