@@ -88,32 +88,8 @@ $("#submit").on("click", function (event) {
         initMap();
     });
 
-    var userLocation = $("#location-input").val();
-    var breweryLocation = [];
-    var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + userLocation + "&s=json";
 
 
-    $.ajax({
-        url: locationURL,
-        method: "GET",
-    }).then(function (response) {
-        console.log(response);
-        for (i = 0; i < response.length; i++) {
-            var name = response[i].name;
-            var id = response[i].id;
-            var address = response[i].street;
-            var location = {
-                name: name,
-                id: id,
-                address: address
-            };
-
-            breweryLocation.push(location);
-
-        }
-        console.log(breweryLocation);
-
-    });
 
     // for (i = 0; i < breweryLocation.length; i++) {
     //     var latLongURL = "http://beermapping.com/webservice/locmap/69532efc6359f9b54164a0a7a34c23d9/" + breweryLocation[i].id + "&s=json";
@@ -124,16 +100,51 @@ $("#submit").on("click", function (event) {
     //     }).then(function (results) {
     //         console.log(results);
 
-            // for (i = 0; i <= results.length; i++) {
+    // for (i = 0; i <= results.length; i++) {
 
-            // }
-            // console.log(results.length);
+    // }
+    // console.log(results.length);
 
-        // });
+    // });
     // };
 
 });
 
+var breweryLocation = [];
+var breweryInfo = {
+    // userLocation: $("#location-input").val(),
+    
+
+    locator(input) {
+        
+        var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + input + "&s=json";
+
+
+        $.ajax({
+            url: locationURL,
+            method: "GET",
+        }).then(function (response) {
+            console.log(response);
+            for (i = 0; i < response.length; i++) {
+                var name = response[i].name;
+                var id = response[i].id;
+                var address = response[i].street;
+                var location = {
+                    name: name,
+                    id: id,
+                    address: address
+                };
+
+                breweryLocation.push(location);
+
+            }
+            console.log(breweryLocation);
+        })
+
+
+    }
+};
+breweryInfo.locator();
 // Save input data to Firebase and save to table
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
