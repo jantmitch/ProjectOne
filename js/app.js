@@ -81,7 +81,7 @@ $("#submit").on("click", function(event) {
             });
             i++;
         }
-        // initMap();
+        initMap();
     });
   
 });  
@@ -132,6 +132,14 @@ var createRow = function(name, address){
 
     // Append the table row to the table body
     tBody.append(tRow);
+
+    // Grab city/state
+    var addressstr = JSON.stringify(address[0]);
+    console.log(addressstr);
+    // for (i = 0; i<addressstr.length;i++){
+    //     console.log(addressstr[i]);
+    // }
+
   };
 
 
@@ -194,7 +202,7 @@ function initMap() {
             // infowindow.open(map, marker[4]);
             // console.log(marker);
             // map.setZoom(9);
-    d        // console.log(marker[i].getPosition());
+            // console.log(marker[i].getPosition());
             // map.setCenter(locations[0]);
         }); 
     }
@@ -241,30 +249,3 @@ $.ajax({
         breweryLocation.push(location);
     }
 });
-
-
-// var latLongURL = "http://beermapping.com/webservice/locmap/69532efc6359f9b54164a0a7a34c23d9/" + locationID + "&s=json";
-
-// $.ajax({
-//     url: latLongURL,
-//     method: "GET"
-//   }).then(function(results) {
-//     console.log(results);
-
-//     for (i = 0; i <= results.length; i++){
-        
-//     }
-//     console.log(results.length);
-//   });
-
-  
-// // Get the size of an object
-// Object.size = function(obj) {
-//     var size = 0, key;
-//     for (key in obj) {
-//         if (obj.hasOwnProperty(key)) size++;
-//     }
-//     return size;
-//   };
-//   // Get the size of an object
-// var size = Object.size(myArray);
