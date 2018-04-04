@@ -36,14 +36,6 @@ var locations = [
 var locationsobj = {};
 
 //On click functions
-$("#test").on("click", function (event) {
-    console.log("test   ");
-    var result = Object.keys(locations).map(function (key) {
-        return [Number(key), locations[key]];
-    });
-    console.log(result);
-});
-
 // Clear Firebase
 $("#clearfirebase").on("click", function (event) {
     database.ref().remove();
@@ -51,8 +43,10 @@ $("#clearfirebase").on("click", function (event) {
     locations = [];
 });
 
+var k = 0;
 // This function handles events where the submit button is clicked
-$("#submit").on("click", function (event) {
+$("#submit").on("click", function(event) {
+    
     // event.preventDefault() prevents submit button from trying to send a form.
     // Using a submit button instead of a regular button allows the user to hit
     // "Enter" instead of clicking the button if desired
@@ -62,10 +56,10 @@ $("#submit").on("click", function (event) {
     var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + googlemapskey;
 
     $.ajax({
-        url: geocodeQuery,
-        method: "GET"
-    }).then(function (response) {
-        // console.log(response);
+      url: geocodeQuery,
+      method: "GET"
+    }).then(function(response) {
+        console.log(response);
         var latit = response.results[0].geometry.location.lat;
         var longi = response.results[0].geometry.location.lng;
         var add = response.results[0].formatted_address;
@@ -145,9 +139,9 @@ breweryInfo.locator();
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
 // This function allows you to update your page in real-time when the firebase database changes.
-database.ref().on("value", function (snapshot) {
-    // console.log(snapshot.val().length);
-    // console.log(snapshot.val());
+database.ref().on("value", function(snapshot) {
+    console.log(snapshot.val().length);
+    console.log(snapshot.val());
     // console.log(locations);
     i = snapshot.val().length;
     initMap();
@@ -164,9 +158,7 @@ database.ref().on("child_added", function (snapshot) {
     // console.log(newlocation);
     locationsobj[j] = newlocation;
     j++;
-
-
-    locations = Object.keys(locationsobj).map(function (key) {
+    locations = Object.keys(locationsobj).map(function(key) {
         // return [Number(key), locationsobj[key]];
         return locationsobj[key];
     });
@@ -192,9 +184,11 @@ var createRow = function (name, address) {
     // Grab city/state
     var addressstr = JSON.stringify(address[0]);
     console.log(addressstr);
-    // for (i = 0; i<addressstr.length;i++){
-    //     console.log(addressstr[i]);
-    // }
+    for (ind = 0; ind<addressstr.length;ind++){
+        if (addressstr[ind] == ","){
+            console.log("comma");
+        }
+    }
 
 };
 
@@ -228,6 +222,8 @@ function initMap() {
         //     // placeMarker(map, event.latLng);
     });
 
+
+    // var infowindwo
     var infowindow = new google.maps.InfoWindow({
         content: "Hello World!"
     });
@@ -242,16 +238,16 @@ function initMap() {
     // console.log(marker[0].getPosition());
 
     var breakvar = false;
-    for (i = 0; i < marker.length; i++) {
-        if (breakvar === true) {
+    for (ind=0 ; ind< marker.length; ind++){
+        if (breakvar === true ){ 
             console.log("break");
-            console.log(i);
+            console.log(ind);
             breakvar = false;
             break;
         }
         google.maps.event.addListener(marker[i], 'click', function () {
             console.log("marker click");
-            console.log(i);
+            console.log(ind);
             // console.log(locations[i - 1]);
 
             breakvar = true;
@@ -282,6 +278,7 @@ function placeMarker(map, location) {
     infowindow.open(map, marker);
 }
 
+  
 
 //Brewery API
 var breweryLocation = [];
@@ -293,10 +290,10 @@ $.ajax({
     method: "GET",
 }).then(function (response) {
     // console.log(response);
-    for (i = 0; i < response.length; i++) {
-        var name = response[i].name;
-        var id = response[i].id;
-        var address = response[i].street;
+    for (ind = 0; ind < response.length; ind++){
+        var name = response[ind].name;
+        var id = response[ind].id;
+        var address = response[ind].street;
         var location = {
             name: name,
             id: id,
