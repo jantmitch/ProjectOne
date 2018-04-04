@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>ProjectOne</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Firebase Reference -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+  <!-- Moment Reference -->
+  <script src="js/moment.js"></script>
+
+  <script src="js/directions.js"></script>
+
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">One.Beer.Later.</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active"><a href="index.html">Home</a></li>
+                  <li><a href="location.html">Location</a></li>
+                  <li><a href="map.html">Map</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+          </div>
+
+
+        </div>
+        <br>
+        <br>
+        <div class="container">
+            <div class="row">
+            <!-- Location Panel-->
+               <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                        </div>
+                        <div class="panel-body">
+                        <form role="form">
+                            <label for="location-input">Add Location to Map:</label>
+                            <input class="form-control" id="location-input" type="text" placeholder="Location or address">
+                            <button class="btn btn-primary btn-lg" id="submit" type="submit">Submit</button>
+                            <button class="btn btn-primary btn-lg" id="clear" type="reset">Clear</button>
+                        </form>
+                        </div>
+                      <!-- <button class="btn btn-primary btn-lg" id="test" type="submit">Test</button> -->
+                    </div>
+                </div>
+            </div>
+       
+            <br>
+            <br>
+      
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1> Table </h1>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Address</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Table">
+                    </tbody>
+                    <button class="btn btn-primary btn-lg" id="clearfirebase" type="submit">Clear Firebase</button>
+                    </table>
+                </div>
+            </div>
+
+      </div>
+
+    </div>
+
+    <!-- Script -->
+    <script type="text/javascript" src="js/app.js"></script>
+
+  </body>
+  </html>
