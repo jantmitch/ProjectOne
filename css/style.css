@@ -13,7 +13,7 @@
 
  table, th, td {
   border: 1px solid rgba(245, 245, 245, 0.733);
-  background-color: rgb(43, 31, 31);
+ /* background-color: rgb(43, 31, 31);*/
 }
 th{
   font-size: 21px;
