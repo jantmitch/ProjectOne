@@ -46,11 +46,6 @@ $("#clearfirebase").on("click", function(event) {
     namesarray = [];
 });
 
-// var k = 0;
-
-// This function handles events where the submit button is clicked
-
-
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
     // event.preventDefault() prevents submit button from trying to send a form.
@@ -100,45 +95,28 @@ $("#submit").on("click", function(event) {
                 });
                 i++;
             }
-            initMap();
+            // initMap();
         });
     }
   
 });  
-// $("#submit").on("click", function(event) {
-    
-//     // event.preventDefault() prevents submit button from trying to send a form.
-//     // Using a submit button instead of a regular button allows the user to hit
-//     // "Enter" instead of clicking the button if desired
-//     event.preventDefault();
-    
-//     var location = $("#location-input").val().trim();
-//     var geocodeQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + googlemapskey;
-    
-//     $.ajax({
-//       url: geocodeQuery,
-//       method: "GET"
-//     }).then(function(response) {
-//         // console.log(response);
-//         var latit = response.results[0].geometry.location.lat;
-//         var longi = response.results[0].geometry.location.lng;
-//         var add = response.results[0].formatted_address;
-//         var coordinates = {lat: latit, lng: longi};
 
-//         if (location !== ""){
-//             // Save the new post in Firebase
-//             database.ref(i).set({
-//                 name: location,
-//                 address: add,
-//                 location: coordinates,
-//                 index: i
-//             });
-//             i++;
-//         }
-//         initMap();
-//     });
-  
-// });  
+
+$(document).on("click", ".remove", function(){
+    var del = $(this).attr("index");
+    console.log(del);
+    namesarray.splice(del,1);
+    locations.splice(del,1);
+    console.log(namesarray);
+    $("#" + del).empty();
+    // database.ref().update();
+    if (del == 0){
+        database.ref(del).child(0).remove();
+        // database.ref(0).update();
+    }
+    database.ref(del).remove();
+    database.ref(del).set(null);
+});
 // Save input data to Firebase and save to table
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
@@ -177,6 +155,7 @@ database.ref().on("child_added", function(snapshot) {
     j++;
 });
 
+var cities = [];
 //Create Table from Firebase
 var createRow = function(name, address, index){
     // Get reference to existing tbody element, create a new table row element
@@ -185,7 +164,7 @@ var createRow = function(name, address, index){
 
     // create and save a reference to a td in the same statement we update its text
     var name = $("<td>").text(name);
-    var address = $("<td>").text(address);
+    var add = $("<td>").text(address);
     var remove = $("<td>").html("<button class='remove' index="+ index + ">X</button>");
 
     // Append the newly created table data to the table row
@@ -195,12 +174,15 @@ var createRow = function(name, address, index){
     tBody.append(tRow);
 
     // Grab city/state. Split string by comma
-    console.log(address[0]);
-    var addressstr = JSON.stringify(address[0]);
-    console.log(addressstr);
-    for (ind = 0; ind<addressstr.length;ind++){
-        if (addressstr[ind] == ","){
-            console.log("comma");
+    for (ind = 0; ind<address.length;ind++){
+        if (address[ind] == ","){
+            var city = address.slice(0,ind);
+            var state = address.slice((ind+2),(ind+4));
+            var cityst = city + "," + state;
+            // console.log(cityst);
+            cities.push(cityst);
+            break;
+            // console.log("comma at index: " + ind);
         }
     }
   };
