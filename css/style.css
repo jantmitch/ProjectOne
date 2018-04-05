@@ -13,7 +13,7 @@
 
  table, th, td {
   border: 1px solid rgba(245, 245, 245, 0.733);
-  
+ /* background-color: rgb(43, 31, 31);*/
 }
 th{
   font-size: 21px;
@@ -52,7 +52,7 @@ body {
   */
   background-image: url("../images/beer3.jpg");
   background-position: center;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-size: 100%;
 }
 
@@ -96,7 +96,8 @@ body {
   font-size: 40px;
   color: black;
   border: 2px solid #fff;
-  background:orange
+  background:orange;
+  
 }
 
 .masthead-nav > li {
