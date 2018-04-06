@@ -11,17 +11,22 @@
      margin-top:10%;
    }
   
-   table, th, td {
+   table, th, tr, td {
     border: 1px solid rgba(245, 245, 245, 0.733);
     background-color: rgb(43, 31, 31);
+    
   }
   th{
     font-size: 21px;
+    
   }
   
-  td{
+  tr{
+      
     font-size: 18px;
-    text-align: left;
+    text-align: center;
+    
+    
   }
   /* Links */
   a,
