@@ -11,10 +11,14 @@ firebase.initializeApp(config);
 
 // Create a variable to reference the database
 var database = firebase.database();
+
 var i = 0;
 
 //Google Maps initialization
 var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
+
+// Create an array of alphabetical characters used to label the markers.
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 //Map Locations Array 
 
@@ -89,10 +93,13 @@ $("#submit").on("click", function(event) {
 });  
 
 $("#beer").on("click", function(event) {
-    // console.log(cities[1]);
     breweryInfo.locator(cities[0]);
     console.log(breweryLocation);
-    breweryRow("1","test","hello");
+    // console.log(breweryLocation[0].address);
+    var breweryaddress = (breweryLocation[0].address + " " + cities[0]);
+    breweryInfo.map(breweryLocation[0].name, breweryaddress);
+    // breweryRow("A",brewery);
+
 });  
 
 $(document).on("click", ".remove", function(){
@@ -116,7 +123,7 @@ $(document).on("click", ".remove", function(){
 // This function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("value", function(snapshot) {
     // console.log(snapshot.val().length);
-    // console.log(snapshot.val());
+    console.log(snapshot.val());
     // console.log(locations);
     i = snapshot.val().length;  
     initMap();
@@ -188,8 +195,6 @@ function initMap() {
       center: atlanta
     });
 
-    // Create an array of alphabetical characters used to label the markers.
-    var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     
     // Add some markers to the map.
     // Note: The code uses the JavaScript Array.prototype.map() method to
@@ -273,8 +278,8 @@ var breweryInfo = {
             url: locationURL,
             method: "GET",
         }).then(function (response) {
-            console.log(response);
-            for (ind = 0; ind < 26 && ind < response.length; ind++)
+            // console.log(response);
+            for (ind = 0; ind < 26 && ind < response.length; ind++){
                 var name = response[ind].name;
                 var id = response[ind].id;
                 var address = response[ind].street;
@@ -283,14 +288,34 @@ var breweryInfo = {
                     id: id,
                     address: address
                 };
-                breweryLocation.push(address);
+                breweryLocation[ind] = location;
             }
-            // console.log(breweryLocation);
-        )
+        })
+    },
+
+    map(brewname, add) {
+        var breweryQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + googlemapskey;
+        $.ajax({
+            url: breweryQuery,
+            method: "GET",
+        }).then(function (response) {
+            var latit = response.results[0].geometry.location.lat;
+            var longi = response.results[0].geometry.location.lng;
+            var add = response.results[0].formatted_address;
+            var coordinates = {lat: latit, lng: longi};
+            console.log(coordinates);
+
+            database.ref(labels[ind]).set({
+                name: brewname,
+                address: add,
+                location: coordinates,
+                index: labels[ind]
+            });
+        });
     }
 };
 
-var breweryRow = function(name, address, index){
+var breweryRow = function(index, name, address){
     // Get reference to existing tbody element, create a new table row element
     var tBody = $("#BreweryTable");
     var tRow = $("<tr>").attr("id", index);

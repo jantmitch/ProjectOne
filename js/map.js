@@ -21,6 +21,17 @@ var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
 var uluru = {lat: -25.363, lng: 131.044};
 var buckinghampalace = {lat: 51.501364, lng: -0.141890};
 var atlanta = {lat: 33.748995, lng: -84.387982};
+// Initialize Firebase
+var config2 = {
+    apiKey: "AIzaSyA2zEy6sKcGz7Euctkzz4FpanpiDpxoAmM",
+    authDomain: "first-project-brewery-map.firebaseapp.com",
+    databaseURL: "https://first-project-brewery-map.firebaseio.com",
+    projectId: "first-project-brewery-map",
+    storageBucket: "",
+    messagingSenderId: "1092161497265"
+  };
+  firebase.initializeApp(config2);
+var database2 = firebase.database();
 
 //Map Locations Array 
 var locations = [
