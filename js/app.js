@@ -32,7 +32,7 @@ var namesobj = {};
 // Clear Firebase
 $("#clearfirebase").on("click", function(event) {
     database.ref().remove();
-    $("#Table").empty();
+    $("#locationstable").empty();
     locations = [];
     namesarray = [];
 });
@@ -78,7 +78,8 @@ $("#submit").on("click", function(event) {
 
             if (location !== ""){
                 // Save the new post in Firebase
-                database.ref(i).set({
+                // database.ref(i).set({
+                database.ref('cities/'+i).set({
                     name: location,
                     address: add,
                     location: coordinates,
@@ -122,24 +123,32 @@ $(document).on("click", ".remove", function(){
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
 // This function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("value", function(snapshot) {
-    // console.log(snapshot.val().length);
     console.log(snapshot.val());
+    // console.log(snapshot.val().cities[0]);
+    // console.log(snapshot.val().cities[0].name);
     // console.log(locations);
-    i = snapshot.val().length;  
+    // i = snapshot.val().cities.length;  
     initMap();
 });
 
-var j = 0;
+// var j = 0;
 // When a Firebase child is added, update your page in real-time
 database.ref().on("child_added", function(snapshot) {
-    // console.log(snapshot.val());
-    
-    var newname = snapshot.val().name;
-    var newaddress = snapshot.val().address;
-    var newlocation = snapshot.val().location;
-    // console.log(newlocation);
-    locationsobj[j] = newlocation;
-    namesobj[j] = newname;
+    for (i=0; i<snapshot.val().length; i++){
+        var newname = snapshot.val()[i].name;
+        var newaddress = snapshot.val()[i].address;
+        var newlocation = snapshot.val()[i].location;
+        // console.log(newname);
+        locationsobj[i] = newlocation;
+        namesobj[i] = newname;
+        createRow(newname,newaddress,i);
+    }
+    // var newname = snapshot.val().name;
+    // var newaddress = snapshot.val().address;
+    // var newlocation = snapshot.val().location;
+    // // console.log(newlocation);
+    // locationsobj[j] = newlocation;
+    // namesobj[j] = newname;
 
     locations = Object.keys(locationsobj).map(function(key) {
         // return [Number(key), locationsobj[key]];
@@ -151,8 +160,8 @@ database.ref().on("child_added", function(snapshot) {
         return namesobj[key];
     });
 
-    createRow(newname,newaddress,j);
-    j++;
+    // createRow(newname,newaddress,j);
+    // j++;
 });
 
 var cities = [];
