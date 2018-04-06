@@ -89,9 +89,10 @@ $("#submit").on("click", function(event) {
 });  
 
 $("#beer").on("click", function(event) {
+    // console.log(cities[1]);
+    breweryInfo.locator(cities[0]);
     console.log(breweryLocation);
-    breweryInfo.locator(cities[1]);
-    breweryRow();
+    breweryRow("1","test","hello");
 });  
 
 $(document).on("click", ".remove", function(){
@@ -151,7 +152,7 @@ var cities = [];
 //Create Table from Firebase
 var createRow = function(name, address, index){
     // Get reference to existing tbody element, create a new table row element
-    var tBody = $("tbody");
+    var tBody = $("#locationstable");
     var tRow = $("<tr>").attr("id", index);
 
     // create and save a reference to a td in the same statement we update its text
@@ -267,11 +268,12 @@ var breweryInfo = {
     // userLocation: $("#location-input").val(),
     locator(input) {
         var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + input + "&s=json";
+        console.log(locationURL);
         $.ajax({
             url: locationURL,
             method: "GET",
         }).then(function (response) {
-            // console.log(response);
+            console.log(response);
             for (ind = 0; ind < 26 && ind < response.length; ind++)
                 var name = response[ind].name;
                 var id = response[ind].id;
