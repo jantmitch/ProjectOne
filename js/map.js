@@ -13,32 +13,27 @@ firebase.initializeApp(config);
 
 // Create a variable to reference the database
 var database = firebase.database();
-var i = 0;
-
 //Google Maps initialization
 var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
 
 //Coordinates
-var uluru = {lat: -25.363, lng: 131.044};
-var buckinghampalace = {lat: 51.501364, lng: -0.141890};
-var atlanta = {lat: 33.748995, lng: -84.387982};
 
 //Map Locations Array 
-var locations = [
-    // uluru,
-    // buckinghampalace,
-    // {lat: 50.501364, lng: -0.141890},
-    // {lat: 34.0470364, lng: -84.4597416},
-    // atlanta
-];
 
-var locationsobj = {};
-// At the initial load and subsequent value changes, get a snapshot of the stored data.
-// This function allows you to update your page in real-time when the firebase database changes.
-database.ref().on("value", function(snapshot) {
-    // console.log(snapshot.val().length);
-    // console.log(snapshot.val());
-    // console.log(locations);
-    i = snapshot.val().length;  
-    initMap();
-});
+var breweryRow = function(name, address, index){
+    // Get reference to existing tbody element, create a new table row element
+    var tBody = $("tbody");
+    var tRow = $("<tr>").attr("id", index);
+
+    // create and save a reference to a td in the same statement we update its text
+    var ind = $("<td>").text(index);
+    var name = $("<td>").text(name);
+    var add = $("<td>").text(address);
+
+    // Append the newly created table data to the table row
+    tRow.append(ind,name,address);
+
+    // Append the table row to the table body
+    tBody.append(tRow);
+
+  };

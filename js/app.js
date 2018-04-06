@@ -16,23 +16,10 @@ var i = 0;
 //Google Maps initialization
 var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
 
-//Coordinates
-var uluru = {lat: -25.363, lng: 131.044};
-var buckinghampalace = {lat: 51.501364, lng: -0.141890};
-var atlanta = {lat: 33.748995, lng: -84.387982}
-//   var address = "Westminster, London SW1A 1AA, UK";
-
 //Map Locations Array 
-// var locations = [
-//     {lat: 38.8976763, lng: -77.0365298}];
-var locations = [
-    // uluru,
-    // buckinghampalace,
-    // {lat: 50.501364, lng: -0.141890},
-    // {lat: 34.0470364, lng: -84.4597416},
-    // atlanta
-];
 
+var atlanta = {lat: 33.748995, lng: -84.387982};
+var locations = [];
 var locationsobj = {};
 var namesarray = [];
 var namesobj = {};
@@ -101,6 +88,11 @@ $("#submit").on("click", function(event) {
   
 });  
 
+$("#beer").on("click", function(event) {
+    console.log(breweryLocation);
+    breweryInfo.locator(cities[1]);
+    breweryRow();
+});  
 
 $(document).on("click", ".remove", function(){
     var del = $(this).attr("index");
@@ -189,7 +181,7 @@ var createRow = function(name, address, index){
 
 //Display Maps
 function initMap() {
-    console.log(locations);
+    // console.log(locations);
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 3,
       center: atlanta
@@ -198,9 +190,6 @@ function initMap() {
     // Create an array of alphabetical characters used to label the markers.
     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     
-    // Marker variable
-    // var marker2 = new google.maps.Marker({position:atlanta});
-
     // Add some markers to the map.
     // Note: The code uses the JavaScript Array.prototype.map() method to
     // create an array of markers based on a given "locations" array.
@@ -213,7 +202,6 @@ function initMap() {
     });
 
     // Map events
-
     // var data;
     // map.addListener('click', function(e) {
     //     // console.log("map click");
@@ -243,10 +231,9 @@ function initMap() {
         google.maps.event.addListener(marker[i],'click',function() {
             console.log("marker click");
             console.log(i);
-            // console.log(locations[i - 1]);
 
             breakvar = true;
-            infowindow.open(map, marker[4]);
+            // infowindow.open(map, marker[4]);
             // console.log(marker);
             // map.setZoom(9);
             // console.log(marker[i].getPosition());
@@ -274,113 +261,47 @@ function initMap() {
   } 
 
 
-
-// //Display Maps
-// function initMap() {
-//     console.log(locations);
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//       zoom: 3,
-//       center: atlanta
-//     });
-
-//     // Create an array of alphabetical characters used to label the markers.
-//     var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-//     // Add some markers to the map.
-//     // Note: The code uses the JavaScript Array.prototype.map() method to
-//     // create an array of markers based on a given "locations" array.
-//     // The map() method here has nothing to do with the Google Maps API.
-//     var marker = locations.map(function(location, i) {
-//       return new google.maps.Marker({
-//         position: location,
-//         label: labels[i % labels.length]
-//       });
-//     });
-
-//     // Map events
-
-//     google.maps.event.addListener(map, 'click', function(event) {
-//         console.log("map click");
-//     //     // placeMarker(map, event.latLng);
-//         });
-
-
-//     // var infowindwo
-//     var infowindow = new google.maps.InfoWindow({
-//         content:"Hello World!"
-//     });
-    
-//     // var data;
-//     // map.addListener('click', function(e) {
-//     //     // console.log("map click");
-//     //     // data.lat = e.latLng.lat();
-//     //     // data.lng = e.latLng.lng();
-//     //     // addToFirebase(data);
-//     //   });
-//     // console.log(marker[0].getPosition());
-
-//     var breakvar = false;
-//     for (ind=0 ; ind< marker.length; ind++){
-//         if (breakvar === true ){ 
-//             console.log("break");
-//             console.log(ind);
-//             breakvar = false;
-//             break;
-//         }
-//         google.maps.event.addListener(marker[i],'click',function() {
-//             console.log("marker click");
-//             console.log(ind);
-//             // console.log(locations[i - 1]);
-
-//             breakvar = true;
-//             // infowindow.open(map, marker[4]);
-//             // console.log(marker);
-//             // map.setZoom(9);
-//             // console.log(marker[i].getPosition());
-//             // map.setCenter(locations[0]);
-//         }); 
-//     }
-    
-
-//     // Add a marker clusterer to manage the markers.
-//     var markerCluster = new MarkerClusterer(map, marker,
-//         {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-//   }
-
-
-//   function placeMarker(map, location) {
-//     // var marker = new google.maps.Marker({
-//     //   position: location,
-//     //   map: map
-//     // });
-//     var infowindow = new google.maps.InfoWindow({
-//       content: 'Latitude: ' + location.lat() +
-//       '<br>Longitude: ' + location.lng()
-//     });
-//     infowindow.open(map,marker);
-//   } 
-
-  
-
-//Brewery API
+// Beer Mapping API
 var breweryLocation = [];
-var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/atlanta&s=json";
-
-
-$.ajax({
-    url: locationURL,
-    method: "GET",
-  }).then(function(response) {
-    // console.log(response);
-    for (ind = 0; ind < response.length; ind++){
-        var name = response[ind].name;
-        var id = response[ind].id;
-        var address = response[ind].street;
-        var location = {
-            name: name,
-            id: id,
-            address: address
-        };
-        breweryLocation.push(location);
+var breweryInfo = {
+    // userLocation: $("#location-input").val(),
+    locator(input) {
+        var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + input + "&s=json";
+        $.ajax({
+            url: locationURL,
+            method: "GET",
+        }).then(function (response) {
+            // console.log(response);
+            for (ind = 0; ind < 26 && ind < response.length; ind++)
+                var name = response[ind].name;
+                var id = response[ind].id;
+                var address = response[ind].street;
+                var location = {
+                    name: name,
+                    id: id,
+                    address: address
+                };
+                breweryLocation.push(address);
+            }
+            // console.log(breweryLocation);
+        )
     }
-});
+};
+
+var breweryRow = function(name, address, index){
+    // Get reference to existing tbody element, create a new table row element
+    var tBody = $("#BreweryTable");
+    var tRow = $("<tr>").attr("id", index);
+
+    // create and save a reference to a td in the same statement we update its text
+    var ind = $("<td>").text(index);
+    var name = $("<td>").text(name);
+    var add = $("<td>").text(address);
+
+    // Append the newly created table data to the table row
+    tRow.append(ind,name,address);
+
+    // Append the table row to the table body
+    tBody.append(tRow);
+
+  };
