@@ -100,7 +100,6 @@ $("#beer").on("click", function(event) {
     var breweryaddress = (breweryLocation[0].address + " " + cities[0]);
     breweryInfo.map(breweryLocation[0].name, breweryaddress);
     // breweryRow("A",brewery);
-
 });  
 
 $(document).on("click", ".remove", function(){
@@ -143,12 +142,6 @@ database.ref().on("child_added", function(snapshot) {
         namesobj[i] = newname;
         createRow(newname,newaddress,i);
     }
-    // var newname = snapshot.val().name;
-    // var newaddress = snapshot.val().address;
-    // var newlocation = snapshot.val().location;
-    // // console.log(newlocation);
-    // locationsobj[j] = newlocation;
-    // namesobj[j] = newname;
 
     locations = Object.keys(locationsobj).map(function(key) {
         // return [Number(key), locationsobj[key]];
@@ -159,9 +152,6 @@ database.ref().on("child_added", function(snapshot) {
         // return [Number(key), locationsobj[key]];
         return namesobj[key];
     });
-
-    // createRow(newname,newaddress,j);
-    // j++;
 });
 
 var cities = [];
@@ -302,7 +292,7 @@ var breweryInfo = {
         })
     },
 
-    map(brewname, add) {
+    map(brewname, add, ind) {
         var breweryQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + add + "&key=" + googlemapskey;
         $.ajax({
             url: breweryQuery,
@@ -312,13 +302,12 @@ var breweryInfo = {
             var longi = response.results[0].geometry.location.lng;
             var add = response.results[0].formatted_address;
             var coordinates = {lat: latit, lng: longi};
-            console.log(coordinates);
 
-            database.ref(labels[ind]).set({
+            database.ref('breweries/'+ ind).set({
                 name: brewname,
                 address: add,
                 location: coordinates,
-                index: labels[ind]
+                index: ind
             });
         });
     }
