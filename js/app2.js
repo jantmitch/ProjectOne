@@ -17,12 +17,12 @@ var i = 0;
 var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
 
 // Create an array of alphabetical characters used to label the markers.
-var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+// var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-// var labels = [];
-// for (l = 0; l< 100;l++){
-//     labels.push(String(l));
-// }
+var labels = [];
+for (l = 0; l< 100;l++){
+    labels.push(String(l));
+}
 
 //Map Locations Array 
 
@@ -117,12 +117,25 @@ $("#beer").on("click", function(event) {
     // console.log(cities);
     breweryInfo.locator(cities[0]);
     console.log(breweryLocation);
+    locations = [];
+    showbrews();
     // console.log(breweryLocation[0].address);
-    for (i=0;i<breweryLocation.length;i++){
-        var breweryaddress = (breweryLocation[i].address + " " + cities[i]);
-        brewFirebase(breweryLocation[i].name, breweryaddress, i);    
-    }
 });  
+
+function showbrews() {
+    for (i=0;i<breweryLocation.length;i++){
+        // var breweryaddress = (breweryLocation[i].address + " " + cities[i]);
+        var breweryaddress = breweryLocation[i].address +""+ cities[0];
+        brewQuery(breweryLocation[i].name, breweryaddress , i);    
+    }
+    
+    locations = Object.keys(brewerylocs).map(function(key) {
+        // return [Number(key), locationsobj[key]];
+        return brewerylocs[key];
+      });
+
+    initMap();
+}
 
 $(document).on("click", ".remove", function(){
     var del = $(this).attr("index");
@@ -146,7 +159,7 @@ $(document).on("click", ".remove", function(){
 database.ref().on("value", function(snapshot) {
     // console.log(snapshot.val());
     citiesobj = snapshot.val();
-    console.log(citiesobj);
+    // console.log(citiesobj);
     // console.
     // brewsobj = snapshot.val().breweries;
     // console.log(breweryLocation);
@@ -163,7 +176,7 @@ database.ref().on("value", function(snapshot) {
 var j = 0;
 // When a Firebase child is added, update your page in real-time
 database.ref().on("child_added", function(snapshot) {
-    console.log(snapshot.val());
+    // console.log(snapshot.val());
     // console.log(i);
     // console.log()
     // for (i=0; i<snapshot.val().length; i++){
@@ -179,9 +192,10 @@ database.ref().on("child_added", function(snapshot) {
     var newname = snapshot.val().name;
     var newaddress = snapshot.val().address;
     var newlocation = snapshot.val().location;
-    createRow(newname,newaddress,i);
-    locationsobj[i] = newlocation;
-    namesobj[i] = newname;
+    createRow(newname,newaddress,j);
+    locationsobj[j] = newlocation;
+    namesobj[j] = newname;
+    // console.log(locationsobj);
 
     locations = Object.keys(locationsobj).map(function(key) {
         // return [Number(key), locationsobj[key]];
@@ -192,6 +206,7 @@ database.ref().on("child_added", function(snapshot) {
         // return [Number(key), locationsobj[key]];
         return namesobj[key];
     });
+    j++;
 });
 
 
@@ -354,7 +369,8 @@ var breweryRow = function(index, name, address,coordinates){
 
   };
 
-  function brewFirebase(brewname, addr, ind) {
+  var brewerylocs = [];
+  function brewQuery(brewname, addr, ind) {
     var breweryQuery = "https://maps.googleapis.com/maps/api/geocode/json?address=" + addr + "&key=" + googlemapskey;
     $.ajax({
         url: breweryQuery,
@@ -365,13 +381,14 @@ var breweryRow = function(index, name, address,coordinates){
         var add = response.results[0].formatted_address;
         var coordinates = {lat: latit, lng: longi};
         var coord = JSON.stringify(coordinates);
+        brewerylocs[ind] = coordinates;
 
-        database.ref('breweries/'+ ind).set({
-            name: brewname,
-            address: add,
-            location: coordinates,
-            index: ind
-        });
-        breweryRow(ind,brewname,addr, coord);
+        // database.ref('breweries/'+ ind).set({
+        //     name: brewname,
+        //     address: add,
+        //     location: coordinates,
+        //     index: ind
+        // });
+        breweryRow(ind,brewname,add, coord);
     });
 }
