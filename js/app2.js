@@ -171,8 +171,6 @@ database.ref().on("value", function(snapshot) {
     initMap();
 });
 
-
-
 var j = 0;
 // When a Firebase child is added, update your page in real-time
 database.ref().on("child_added", function(snapshot) {
@@ -283,25 +281,26 @@ function initMap() {
     
     // console.log(marker[0].getPosition());
     var breakvar = false;
-    for (i=0 ; i< marker.length; i++){
-        if (breakvar === true ){ 
-            console.log("break");
-            console.log(i);
-            breakvar = false;
-            break;
-        }
-        google.maps.event.addListener(marker[i],'click',function() {
+    // for (testind=0 ; testind< marker.length; testind++){
+    //     if (breakvar == true ){ 
+    //         console.log("break");
+    //         console.log(testind);
+    //         breakvar = false;
+    //         break;
+    //     }
+        
+        google.maps.event.addListener(marker,'click',function() {
             console.log("marker click");
-            console.log(i);
-
+            // console.log(testind);
             breakvar = true;
+            
             // infowindow.open(map, marker[4]);
             // console.log(marker);
             // map.setZoom(9);
             // console.log(marker[i].getPosition());
-            // map.setCenter(locations[0]);
-        }); 
-    }
+            // map.setCenter(locations[0]); 
+        });
+    // }
     
 
     // Add a marker clusterer to manage the markers.
