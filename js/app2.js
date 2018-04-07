@@ -11,19 +11,18 @@ firebase.initializeApp(config);
 
 // Create a variable to reference the database
 var database = firebase.database();
-
 var i = 0;
 
 //Google Maps initialization
 var googlemapskey = "AIzaSyACZMGscEwWMY3TJblK-NuIwhIRsoEaAnI";
 
 // Create an array of alphabetical characters used to label the markers.
-// var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-var labels = [];
-for (l = 0; l< 100;l++){
-    labels.push(String(l));
-}
+// var labels = [];
+// for (l = 0; l< 100;l++){
+//     labels.push(String(l));
+// }
 
 //Map Locations Array 
 
@@ -32,15 +31,19 @@ var locations = [];
 var locationsobj = {};
 var namesarray = [];
 var namesobj = {};
+var brewsobj = {};
 
 //On click functions
 // Clear Firebase
 $("#clearfirebase").on("click", function(event) {
     database.ref().remove();
     $("#locationstable").empty();
+    $("#BreweryTable").empty();
     locations = [];
     namesarray = [];
+    i=0;
 });
+
 
 // This function handles events where the submit button is clicked
 $("#submit").on("click", function(event) {
@@ -57,8 +60,8 @@ $("#submit").on("click", function(event) {
         console.log("no Input");
         repeat = true;
     }
-    for (i=0; i<namesarray.length; i++){
-        if (namesarray[i] == location){
+    for (k=0; k<namesarray.length; k++){
+        if (namesarray[k] == location){
             console.log("name repeat");
             repeat = true;
             break;
@@ -75,7 +78,7 @@ $("#submit").on("click", function(event) {
         url: geocodeQuery,
         method: "GET"
         }).then(function(response) {
-            console.log(response);
+            // console.log(response);
             var latit = response.results[0].geometry.location.lat;
             var longi = response.results[0].geometry.location.lng;
             var add = response.results[0].formatted_address;
@@ -83,24 +86,42 @@ $("#submit").on("click", function(event) {
 
             if (location !== ""){
                 // Save the new post in Firebase
-                database.ref('cities/'+i).set({
+                // database.ref(i).set({
+                database.ref(i).set({
                     name: location,
                     address: add,
                     location: coordinates,
                     index: i
                 });
-                i++;
             }
+            // initMap();
         });
     }
-//   loctable();
 });  
 
+
+var citiesobj = {};
+
+function loctable() {
+    // console.log(citiesobj);
+    // console.log(brewsobj);
+    $("#BreweryTable").empty();
+    $("#locationstable").empty();
+    for (i=0; i< citiesobj.length; i++){
+        createRow(citiesobj[i].name,citiesobj[i].address, citiesobj[i].index)
+    }
+
+}
+
 $("#beer").on("click", function(event) {
+    // console.log(cities);
     breweryInfo.locator(cities[0]);
-    console.log(brewsobj);
-    // console.log(breweryLocation[0]);
-    breweryInfo.BreweriestoFirebase(brewsobj[0].name,brewsobj[0].address,brewsobj[0].index);
+    console.log(breweryLocation);
+    // console.log(breweryLocation[0].address);
+    for (i=0;i<breweryLocation.length;i++){
+        var breweryaddress = (breweryLocation[i].address + " " + cities[i]);
+        brewFirebase(breweryLocation[i].name, breweryaddress, i);    
+    }
 });  
 
 $(document).on("click", ".remove", function(){
@@ -122,60 +143,45 @@ $(document).on("click", ".remove", function(){
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
 // This function allows you to update your page in real-time when the firebase database changes.
-var citiesobj = {};
-var brewsobj = {};
-
 database.ref().on("value", function(snapshot) {
-    console.log(snapshot.val());
-    // console.log(citiesobj);
-    // console.log(citiesobj[0].name + citiesobj[0].addresss + citiesobj[0].index);
-    // console.log(snapshot.val().cities[0].name);
-    // console.log(locations);'
-
-    i = snapshot.val().cities.length;  
-    // console.log(i);
-
-    citiesobj = snapshot.val().cities;
+    // console.log(snapshot.val());
+    citiesobj = snapshot.val();
     console.log(citiesobj);
-        // brewsobj = snapshot.val().breweries;
-        // console.log(brewsobj);
+    // console.
+    // brewsobj = snapshot.val().breweries;
+    // console.log(breweryLocation);
 
+    // i = citiesobj.length; 
+    // console.log(i);
+    i = snapshot.val().length; 
     loctable();
     initMap();
 });
 
-function loctable() {
-    console.log(citiesobj);
-    // console.log(brewsobj);
 
-    // for (j=0; j<brewsobj.length;j++){
-    //     // console.log(brewsobj[j].index);
-    //     if (brewsobj[j].index){
-    //         breweryRow(brewsobj[j].index,brewsobj[j].name,brewsobj[j].address,brewsobj[j].location);
-    //     } else {continue;}
-    // }
-    // console.log(citiesobj[0].name + citiesobj[0].address + citiesobj[0].index);
-    // createRow(citiesobj[0].name,citiesobj[0].address,citiesobj[0].index);
-}
 
-// var j = 0;
+var j = 0;
 // When a Firebase child is added, update your page in real-time
 database.ref().on("child_added", function(snapshot) {
-    for (i=0; i<snapshot.val().length; i++){
-        var newname = snapshot.val()[i].name;
-        var newaddress = snapshot.val()[i].address;
-        var newlocation = snapshot.val()[i].location;
-        // console.log(newname);
-        locationsobj[i] = newlocation;
-        namesobj[i] = newname;
-        // createRow(newname,newaddress,i);
-    }
-    
-    // var newname = snapshot.val().name;
-    // var newaddress = snapshot.val().address;
-    // var newlocation = snapshot.val().location;
-    
-    // console.log(snapshot.val().cities);
+    console.log(snapshot.val());
+    // console.log(i);
+    // console.log()
+    // for (i=0; i<snapshot.val().length; i++){
+    //     var newname = snapshot.val()[i].name;
+    //     var newaddress = snapshot.val()[i].address;
+    //     var newlocation = snapshot.val()[i].location;
+    //     // console.log(newname);
+    //     locationsobj[i] = newlocation;
+    //     namesobj[i] = newname;
+    //     createRow(newname,newaddress,i);
+    // }
+    // loctable();
+    var newname = snapshot.val().name;
+    var newaddress = snapshot.val().address;
+    var newlocation = snapshot.val().location;
+    createRow(newname,newaddress,i);
+    locationsobj[i] = newlocation;
+    namesobj[i] = newname;
 
     locations = Object.keys(locationsobj).map(function(key) {
         // return [Number(key), locationsobj[key]];
@@ -187,6 +193,7 @@ database.ref().on("child_added", function(snapshot) {
         return namesobj[key];
     });
 });
+
 
 var cities = [];
 //Create Table from Firebase
@@ -303,7 +310,6 @@ function initMap() {
 // Beer Mapping API
 var breweryLocation = [];
 var breweryInfo = {
-
     // userLocation: $("#location-input").val(),
     locator(input) {
         var locationURL = "http://beermapping.com/webservice/loccity/69532efc6359f9b54164a0a7a34c23d9/" + input + "&s=json";
@@ -312,27 +318,24 @@ var breweryInfo = {
             url: locationURL,
             method: "GET",
         }).then(function (response) {
-            // console.log(response.length);
+            // console.log(response);
             for (ind = 0; ind < 26 && ind < response.length; ind++){
                 var name = response[ind].name;
                 var id = response[ind].id;
                 var address = response[ind].street;
-                // console.log(address);
                 var location = {
                     name: name,
                     id: id,
-                    address: address,
-                    index: ind
+                    address: address
                 };
                 breweryLocation[ind] = location;
             }
-            brewsobj = breweryLocation;
-            console.log(brewsobj);
         })
-    },
+        // brewsobj = breweryLocation;
+    }
 };
 
-var breweryRow = function(index, name, address, location){
+var breweryRow = function(index, name, address,coordinates){
     // Get reference to existing tbody element, create a new table row element
     var tBody = $("#BreweryTable");
     var tRow = $("<tr>").attr("id", index);
@@ -340,12 +343,11 @@ var breweryRow = function(index, name, address, location){
     // create and save a reference to a td in the same statement we update its text
     var ind = $("<td>").text(index);
     var name = $("<td>").text(name);
-    // console.log(address);
     var add = $("<td>").text(address);
-    var loc = $("<td>").text(JSON.stringify(location));
+    var coord = $("<td>").text(coordinates);
 
     // Append the newly created table data to the table row
-    tRow.append(ind,name,address,loc);
+    tRow.append(ind,name,address,coord);
 
     // Append the table row to the table body
     tBody.append(tRow);
@@ -362,6 +364,7 @@ var breweryRow = function(index, name, address, location){
         var longi = response.results[0].geometry.location.lng;
         var add = response.results[0].formatted_address;
         var coordinates = {lat: latit, lng: longi};
+        var coord = JSON.stringify(coordinates);
 
         database.ref('breweries/'+ ind).set({
             name: brewname,
@@ -369,6 +372,6 @@ var breweryRow = function(index, name, address, location){
             location: coordinates,
             index: ind
         });
-        // console.log("Brewery added");
+        breweryRow(ind,brewname,addr, coord);
     });
 }
