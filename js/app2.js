@@ -220,10 +220,11 @@ var createRow = function(name, address, index){
     // create and save a reference to a td in the same statement we update its text
     var name = $("<td>").text(name);
     var add = $("<td>").text(address);
-    var remove = $("<td>").html("<button class='remove' index="+ index + ">X</button>");
+    // var remove = $("<td>").html("<button class='remove' index="+ index + ">X</button>");
+    var index = $("<td>").text(index);
 
     // Append the newly created table data to the table row
-    tRow.append(name,address,remove);
+    tRow.append(name,address,index);
 
     // Append the table row to the table body
     tBody.append(tRow);
